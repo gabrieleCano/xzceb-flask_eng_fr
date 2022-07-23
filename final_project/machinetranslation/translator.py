@@ -10,23 +10,27 @@ def init_translator():
     """
     initializing the translator service
     """
-    load_dotenv()
-    apikey = os.environ['apikey']
-    url = os.environ['url']
-    local_authenticator = IAMAuthenticator(apikey)
-    translator_service = LanguageTranslatorV3(
-        version='2018-05-01',
-        authenticator=local_authenticator
-    )
-    translator_service.set_service_url(url)
+    if language_translator is None:
+        load_dotenv()
+        apikey = os.environ['apikey']
+        url = os.environ['url']
+        local_authenticator = IAMAuthenticator(apikey)
+        translator_service = LanguageTranslatorV3(
+            version='2018-05-01',
+            authenticator=local_authenticator
+        )
+        translator_service.set_service_url(url)
+
     return translator_service
+    
 
 def english_to_french(english_text):
     """
     Translate from English to French
     """
     if english_text is not None and isinstance(english_text, str) and len(english_text) > 0:
-        return get_translation('en-fr',english_text)
+        result = get_translation('en-fr',english_text)
+        return manage_result(result)
     return {"status" : 400, "result" : "You have entered an empty text. Please retry."}
 
 def french_to_english(french_text):
@@ -34,7 +38,8 @@ def french_to_english(french_text):
     Translate from French to English
     """
     if french_text is not None and isinstance(french_text, str) and len(french_text) > 0:
-        return get_translation('fr-en',french_text)
+        result = get_translation('fr-en',french_text)
+        return manage_result(result)
     return {"status" : 400, "result" : "You have entered an empty text. Please retry."}
 
 def translate(translator, text):
@@ -72,9 +77,18 @@ def get_translation(translator, text):
                     return {"status" : 400, "result" : "Can't find a translation"}
     return {"status" : 500, "result" : "Error"}
 
-#Main Code
+def manage_result(result):
+    """
+    Manage the result
+    """
+    try:
+        return (True, language_translator.translate(
+            text=text,
+            model_id=translator).get_result())
+    except ApiException as ex:
+        return (False, "Method failed with status code " + str(ex.code) +
+                ": " + ex.message, ex.code)
 
-print("Welcome to the English/French translator!")
 language_translator = init_translator()
 
 if language_translator is not None:
@@ -109,8 +123,7 @@ if language_translator is not None:
                     500 : ('Error', 'Sorry, but something went wrong. Please retry later.', False)
                 }
 
-                print(manage_status[result_received['status']][1])
-                SELECT_CONDITION = manage_status[result_received['status']][2]
+                return manage_status[result_received['status']][1]
 
             elif INT_SELECTION == 3:
                 print("Bye!")
@@ -120,4 +133,4 @@ if language_translator is not None:
         else:
             print("You have entered a wrong selection (" + selection + "). Please retry.")
 else:
-    print("I'm sorry, but the translator is currently unavailable. Please retry.")
+    return "Translator is currently unavailable. Please retry later."
