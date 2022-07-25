@@ -17,35 +17,43 @@ class TestEnglishToFrench(unittest.TestCase):
         text_to_translate = 'Hello'
         result = english_to_french(text_to_translate)
         self.assertEqual(result, "Bonjour")
+        self.assertNotEqual(result, "Hello")
     def test_empty_string(self):
         """
         Test an empty string
         """
         text_to_translate = ''
         result = english_to_french(text_to_translate)
-        self.assertEqual(result, "You have entered an empty text or a number. Please retry.")
+        self.assertEqual(result,
+         "You have entered an empty text or a number. Please retry.")
+        self.assertNotEqual(result, '')
     def test_null_string(self):
         """
         Test a null string
         """
         text_to_translate = None
         result = english_to_french(text_to_translate)
-        self.assertEqual(result, "You have entered an empty text or a number. Please retry.")
+        self.assertEqual(result,
+         "You have entered an empty text or a number. Please retry.")
+        self.assertNotEqual(result, None)
     def test_numeric_value(self):
         """
         Test a numeric value
         """
         text_to_translate = 458
         result = english_to_french(text_to_translate)
-        self.assertEqual(result, "You have entered an empty text or a number. Please retry.")
+        self.assertEqual(result,
+        "You have entered an empty text or a number. Please retry.")
+        self.assertNotEqual(result, 458)
     def test_non_existent_word(self):
         """
-        Test a null string
+        Test a non existent word
         """
         text_to_translate = "sjkahdajsd"
         result = english_to_french(text_to_translate)
         self.assertEqual(result, 'Sorry, I can\'t find a translation for the text: '
         + text_to_translate)
+        self.assertNotEqual(result, "sjkahdajsd")
 
 
 class TestFrenchToEnglish(unittest.TestCase):
@@ -59,35 +67,43 @@ class TestFrenchToEnglish(unittest.TestCase):
         text_to_translate = 'Bonjour'
         result = french_to_english(text_to_translate)
         self.assertEqual(result, "Hello")
+        self.assertNotEqual(result, "Bonjour")
     def test_empty_string(self):
         """
         Test an empty string
         """
         text_to_translate = ''
         result = french_to_english(text_to_translate)
-        self.assertEqual(result, "You have entered an empty text or a number. Please retry.")
+        self.assertEqual(result,
+        "You have entered an empty text or a number. Please retry.")
+        self.assertNotEqual(result, "")
     def test_null_string(self):
         """
         Test a null string
         """
         text_to_translate = None
         result = french_to_english(text_to_translate)
-        self.assertEqual(result, "You have entered an empty text or a number. Please retry.")
+        self.assertEqual(result,
+        "You have entered an empty text or a number. Please retry.")
+        self.assertNotEqual(result, None)
     def test_numeric_value(self):
         """
         Test a numeric value
         """
         text_to_translate = 9875
         result = french_to_english(text_to_translate)
-        self.assertEqual(result, "You have entered an empty text or a number. Please retry.")
+        self.assertEqual(result,
+        "You have entered an empty text or a number. Please retry.")
+        self.assertNotEqual(result, 9875)
     def test_non_existent_word(self):
         """
-        Test a null string
+        Test a non existent word
         """
         text_to_translate = "pldslaodlsao"
         result = french_to_english(text_to_translate)
         self.assertEqual(result, 'Sorry, I can\'t find a translation for the text: '
         + text_to_translate)
+        self.assertNotEqual(result, "pldslaodlsao")
 
 
 class TestAssertEnvironmentVariables(unittest.TestCase):
